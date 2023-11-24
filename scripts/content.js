@@ -1,11 +1,27 @@
+const recipeWebSource = "apetitOnline";
+
 const classes = {
-    ingredientsSection: ".s-recipe__ingredients",
-    ingredientName: ".s-recipe__ingredients-name",
-    ingredientQuantity: ".s-recipe__ingredients-quantity",
-    ingredientUnit: ".s-recipe__ingredients-unit"
+    buttonInjectSection: {
+        apetitOnline: ".s-recipe__ingredients-items"
+    },
+    ingredientsSection: {
+        apetitOnline: ".s-recipe__ingredients"
+    },
+    ingredientName: {
+        apetitOnline: ".s-recipe__ingredients-name"
+    },
+    ingredientQuantity: {
+        apetitOnline: ".s-recipe__ingredients-quantity"
+    },
+    ingredientUnit: {
+        apetitOnline: ".s-recipe__ingredients-unit"
+    },
+    ingredientsItems: {
+        apetitOnline: ".s-recipe__ingredients-item:not(.s-recipe__ingredients-item--subtitle)"
+    }
 }
 
-const ingredients = document.querySelector(classes.ingredientsSection);
+const ingredients = document.querySelector(classes.ingredientsSection[recipeWebSource]);
 let iItems = [];
 
 function base64ToBytes(base64) {
@@ -48,12 +64,12 @@ const changeURL = (order_json) => {
 }
 
 if (ingredients) {
-    const items = ingredients.querySelectorAll(".s-recipe__ingredients-item:not(.s-recipe__ingredients-item--subtitle)");
+    const items = ingredients.querySelectorAll(classes.ingredientsItems[recipeWebSource]);
     items.forEach((i) => {
         const ingredient = {
-            name: i.querySelector(classes.ingredientName) ? i.querySelector(classes.ingredientName).innerText : "",
-            amount: i.querySelector(classes.ingredientQuantity) ? i.querySelector(classes.ingredientQuantity).innerText : "",
-            unit: i.querySelector(classes.ingredientUnit) ? i.querySelector(classes.ingredientUnit).innerText : "",
+            name: i.querySelector(classes.ingredientName[recipeWebSource]) ? i.querySelector(classes.ingredientName[recipeWebSource]).innerText : "",
+            amount: i.querySelector(classes.ingredientQuantity[recipeWebSource]) ? i.querySelector(classes.ingredientQuantity[recipeWebSource]).innerText : "",
+            unit: i.querySelector(classes.ingredientUnit[recipeWebSource]) ? i.querySelector(classes.ingredientUnit[recipeWebSource]).innerText : "",
         }
         iItems.push(ingredient);
     })
@@ -69,7 +85,7 @@ if (ingredients) {
     button.style.padding = "10px";
     button.innerText = "Click&Buy";
     button.onclick = () => changeURL(encodedJSON);
-    const ingredientsList = ingredients.querySelector(".s-recipe__ingredients-items");
+    const ingredientsList = ingredients.querySelector(classes.buttonInjectSection[recipeWebSource]);
     ingredientsList.insertAdjacentElement("afterend", button);
 }
 
