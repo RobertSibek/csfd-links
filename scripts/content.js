@@ -1,4 +1,11 @@
-const ingredients = document.querySelector(".s-recipe__ingredients");
+const classes = {
+    ingredientsSection: ".s-recipe__ingredients",
+    ingredientName: ".s-recipe__ingredients-name",
+    ingredientQuantity: ".s-recipe__ingredients-quantity",
+    ingredientUnit: ".s-recipe__ingredients-unit"
+}
+
+const ingredients = document.querySelector(classes.ingredientsSection);
 let iItems = [];
 
 function base64ToBytes(base64) {
@@ -12,9 +19,8 @@ function bytesToBase64(bytes) {
 }
 
 const changeURL = (order_json) => {
-    let clicknbuy_provider = "";
     chrome.storage.sync.get(["key"]).then((result) => {
-        clicknbuy_provider = result.key;
+        let clicknbuy_provider = result.key;
         switch (clicknbuy_provider) {
             case "rohlik":
                 provider_url = "https://rohlik.cz?addToCart=";
@@ -45,18 +51,14 @@ if (ingredients) {
     const items = ingredients.querySelectorAll(".s-recipe__ingredients-item:not(.s-recipe__ingredients-item--subtitle)");
     items.forEach((i) => {
         const ingredient = {
-            name: i.querySelector(".s-recipe__ingredients-name") ? i.querySelector(".s-recipe__ingredients-name").innerText : "",
-            amount: i.querySelector(".s-recipe__ingredients-quantity") ? i.querySelector(".s-recipe__ingredients-quantity").innerText : "",
-            unit: i.querySelector(".s-recipe__ingredients-unit") ? i.querySelector(".s-recipe__ingredients-unit").innerText : "",
+            name: i.querySelector(classes.ingredientName) ? i.querySelector(classes.ingredientName).innerText : "",
+            amount: i.querySelector(classes.ingredientQuantity) ? i.querySelector(classes.ingredientQuantity).innerText : "",
+            unit: i.querySelector(classes.ingredientUnit) ? i.querySelector(classes.ingredientUnit).innerText : "",
         }
         iItems.push(ingredient);
     })
     const json = JSON.stringify(iItems);
     const encodedJSON = bytesToBase64(new TextEncoder().encode(json));
-    const badge = document.createElement("p");
-    badge.classList.add("color-secondary-text", "type--caption");
-    const da = new Date();
-    badge.textContent = `⏱️ ${da} min read`;
     const button = document.createElement("button");
     button.classList.add("buttonStyle")
     button.style.backgroundColor = "#FF653F";

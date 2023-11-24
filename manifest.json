@@ -5,7 +5,7 @@
   "description": "One click to buy needed ingredients for your recipe",
   "version": "1.0",
   "action": {
-    "default_popup": "oneclick.html",
+    "default_popup": "clicknbuy.html",
     "default_icon": "images/IconBlue@2x.png"
   },
   "icons": {
@@ -21,8 +21,6 @@
     {
       "js": ["scripts/content.js", "scripts/main.js"],
       "matches": [
-        "https://developer.chrome.com/docs/extensions/*",
-        "https://developer.chrome.com/docs/webstore/*",
         "https://www.apetitonline.cz/recept/*"
       ]
     }
