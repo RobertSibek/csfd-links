@@ -1,7 +1,37 @@
-console.log("In the script");
+const host = window.location.host;
 
+const vods = {
+    hbomax: "play.hbomax.com",
+    netflix: "www.netflix.com",
+    kviff: "kviff.tv"
+}
 
-setTimeout(executeScript, 4000);
+const getKeyByValue = (object, value) => {
+    return Object.keys(object).find(key =>
+        object[key] === value);
+}
+
+const vodProvider = getKeyByValue(vods, host);
+console.log('vodProvider', vodProvider);
+
+const cssSelectors = {
+    buttonInjectSection: {
+        hbomax: ".css-1rynq56.r-8akbws.r-krxsd3.r-dnmrzs.r-1udh08x.r-1udbk01",
+        netflix: ".fallback-text",
+        kviff: ".row.section-film--row>div>h1"
+    },
+}
+const checkClassElementExists = () => {
+    const movieTitles = document.querySelectorAll(cssSelectors.buttonInjectSection[vodProvider]);
+
+    if (movieTitles.length > 0) {
+        clearInterval(clock);
+        console.log("Element found!");
+        executeScript(movieTitles);
+    }
+}
+
+let clock = setInterval(checkClassElementExists, 300);
 
 // var loaded = false;
 // document.onreadystatechange = function () {
@@ -11,31 +41,7 @@ setTimeout(executeScript, 4000);
 //     loaded = true;
 // }
 
-function getKeyByValue(object, value) {
-    return Object.keys(object).find(key =>
-        object[key] === value);
-}
-
-function executeScript() {
-    const host = window.location.host;
-
-    const vods = {
-        hbomax: "play.hbomax.com",
-        netflix: "www.netflix.com"
-    }
-
-    const VODwebSource = getKeyByValue(vods, host);
-
-    const classes = {
-        buttonInjectSection: {
-            // hbomax: ".css-1rynq56.r-knv0ih"
-            hbomax: ".css-1rynq56.r-8akbws.r-krxsd3.r-dnmrzs.r-1udh08x.r-1udbk01",
-            netflix: "previewModal--player-titleTreatment-logo"
-            // hbomax: "css-175oi2r.r-1loqt21.r-1otgn73"
-        },
-    }
-    const moviePage = document.querySelectorAll(classes.buttonInjectSection["netflix"]);
-    console.log('moviePage', moviePage);
+function executeScript(movieTitles) {
 
     const openURL = (movieTitle) => {
         // chrome.storage.sync.get(["key"]).then((result) => {
@@ -69,13 +75,10 @@ function executeScript() {
             console.log("Click&Buy provider not defined.");
         }
     }
-
-    if (!moviePage) {
+    if (!movieTitles) {
         console.log("Movie page not found");
     } else {
-        console.log("Movie page found", moviePage);
-
-        moviePage.forEach((movie) => {
+        movieTitles.forEach((movie) => {
             console.log("title", movie.innerText);
             const button = document.createElement("button");
             button.classList.add("buttonStyle")
@@ -83,18 +86,29 @@ function executeScript() {
             button.style.borderColor = "#5A5A5A";
             button.style.color = "#FFFFFF";
             button.style.borderRadius = "10px";
-            button.style.margin = "1px";
-            button.style.padding = "1px";
+            button.style.margin = "5px";
+            button.style.alignSelf = "center";
+            button.style.padding = "5px";
+            button.style.width = "50px";
+            // button.style.backgroundImage = "../images/logo-white-red.svg";
             button.innerText = "CSFD";
             // const movieTitle = movie.innerText;
             // button.onclick = () => openURL(movieTitle);
             // const movieDetails = moviePage.querySelector(classes.buttonInjectSection["hbomax"]);
-            if (VODwebSource === vods.hbomax) {
+            if (vodProvider === "hbomax") {
                 const movieTitle = movie.innerText;
                 button.onclick = () => openURL(movieTitle);
-                movie.parentNode.parentNode.insertAdjacentElement("afterend", button);
-            } else if (VODwebSource === vods.netflix) {
-                const movieTitle = movie.title;
+                movie.parentNode.parentNode.parentNode.parentNodeinsertAdjacentElement("afterend", button);
+            } else if (vodProvider === "netflix") {
+                const movieTitle = movie.innerText;
+                console.log(movieTitle);
+                button.onclick = () => openURL(movieTitle);
+                movie.parentNode.parentNode.parentNode.insertAdjacentElement("afterend", button);
+            } else if (vodProvider === "kviff") {
+                button.style.fontSize = "12px";
+                // text.replace(/blue/g, "red");
+                const movieTitle = movie.innerText.replace(/#/g, "");
+                console.log(movieTitle);
                 button.onclick = () => openURL(movieTitle);
                 movie.insertAdjacentElement("afterend", button);
             }
@@ -102,5 +116,3 @@ function executeScript() {
 
     }
 }
-
-// });

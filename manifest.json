@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "author": "Robert Sibek 2023",
   "name": "CSFD Links",
-  "description": "Show CSFD movie page",
-  "version": "1.0",
+  "description": "Zobrazí tlačítko s odkazem na CSFD u vybraných VOD poskytovatelů",
+  "version": "0.0.0.5",
   "action": {
     "default_popup": "csfd_links.html",
     "default_icon": "images/Icon@8x.png"
@@ -15,19 +15,15 @@
     "64": "images/Icon@4x.png",
     "128": "images/Icon@8x.png"
   },
-  "permissions": [
-    "storage"
-  ],
   "content_scripts": [
     {
       "js": [
         "scripts/content.js",
         "scripts/main.js"
       ],
-      "run_at": "document_idle",
       "matches": [
-        "https://play.hbomax.com/*",
-        "https://www.netflix.com/*"
+        "https://www.netflix.com/*",
+        "https://kviff.tv/*"
       ]
     }
   ]
